@@ -324,6 +324,11 @@ def _get_langfuse_data_from_kwargs(
         else None
     )
 
+    parsed_stream_options = kwargs.get("stream_options", {})
+
+    if parsed_stream_options is not None and not isinstance(parsed_stream_options, dict):
+        raise TypeError("parsed_stream_options must be a dictionary")
+
     modelParameters = {
         "temperature": parsed_temperature,
         "max_tokens": parsed_max_tokens,  # casing?
@@ -333,7 +338,9 @@ def _get_langfuse_data_from_kwargs(
     }
     if parsed_seed is not None:
         modelParameters["seed"] = parsed_seed
-
+    if parsed_stream_options is not None: 
+        modelParameters["stream_options"] = parsed_stream_options
+        
     langfuse_prompt = kwargs.get("langfuse_prompt", None)
 
     return {
